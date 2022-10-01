@@ -9,10 +9,14 @@ myReadStream.on("data", (chunk) => {
   myWriteStream.write(chunk);
 });
 
+// Alternituvely, we can use pipe
+myReadStream.pipe(myWriteStream);
 const server = http.createServer((req, res) => {
   console.log("Server is running");
   res.writeHead(200, { "Content-Type": "text/html" });
-  res.end(`<h1>Hello World</h1>`);
+  const myReadStream = fs.createReadStream(__dirname + "/readme.md", "utf8");
+  myReadStream.pipe(res);
+  // res.end(`<h1>${myReadStream.pipe(res)}</h1>`);
 });
 
 server.listen(3000, "127.0.0.1", () =>
